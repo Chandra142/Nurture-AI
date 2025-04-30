@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NurtureAI - Your Personal Parenting Assistant</title>
+    <meta name="description" content="NurtureAI: Your personal parenting assistant offering expert, practical advice for every stage of your child's journey">
+    <meta name="twitter:card" content="summary_large_image">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <script type="importmap">
+  {
+    "imports": {
+      "@google/generative-ai": "https://esm.run/@google/generative-ai"
+    }
+  }
+</script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #fff3e6 0%, #ffe6e6 100%);
+        overflow-x: hidden;
+      }
+
+      h1, h2, h3 {
+        font-family: 'Nunito', sans-serif;
+      }
+
+      .section-title {
+        background: linear-gradient(45deg, #ff6b6b, #ffa726);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.025em;
+      }
+
+      .feature-card {
+        background: linear-gradient(145deg, #ffffff 0%, #fef2f2 100%);
+        border: 1px solid rgba(255, 107, 107, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.15);
+      }
+
+      .resource-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 107, 107, 0.15);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      }
+
+      .resource-card:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(255, 107, 107, 0.1);
+      }
+
+      .testimonial-card {
+        background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+        border-left: 4px solid #ff6b6b;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .testimonial-card::before {
+        content: "“";
+        position: absolute;
+        font-size: clamp(4rem, 8vw, 8rem);
+        opacity: 0.05;
+        top: -3rem;
+        left: -1rem;
+        font-family: serif;
+        line-height: 1;
+      }
+
+      /* Hero Section Styles */
+      .hero-section {
+        position: relative;
+        overflow: hidden;
+        padding: 8rem 0 4rem;
+      }
+
+      .hero-background {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 30% 20%, rgba(255,107,107,0.2) 0%, transparent 70%),
+                    radial-gradient(circle at 70% 80%, rgba(255,165,38,0.2) 0%, transparent 70%);
+        animation: pulse-gradient 15s ease-in-out infinite;
+      }
+
+      @keyframes pulse-gradient {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.1); opacity: 1; }
+      }
+
+      .hero-floating-icon {
+        position: absolute;
+        color: rgba(255,255,255,0.2);
+        font-size: 3rem;
+        animation: float-3d 10s ease-in-out infinite;
+      }
+
+      @keyframes float-3d {
+        0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+        25% { transform: translateY(-20px) rotateX(10deg) rotateY(10deg); }
+        75% { transform: translateY(20px) rotateX(-10deg) rotateY(-10deg); }
+      }
+
+      .hero-title {
+        font-weight: 800;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .hero-tagline {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        animation: typewriter 4s steps(40) 1s 1 normal both;
+      }
+
+      @keyframes typewriter {
+        from { width: 0; }
+        to { width: 100%; }
+      }
+
+      .hero-carousel {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      }
+
+      .hero-carousel img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.5s ease;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+      }
+
+      .hero-carousel img.active {
+        opacity: 1;
+        position: relative;
+      }
+
+      .carousel-nav {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .carousel-dot {
+        width: 0.75rem;
+        height: 0.75rem;
+        background: rgba(255,255,255,0.5);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .carousel-dot.active {
+        background: #fff;
+      }
+
+      .hero-stats {
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(8px);
+        border-radius: 1rem;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .hero-cta-card {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: transform 0.3s ease;
+      }
+
+      .hero-cta-card:hover {
+        transform: scale(1.05);
+      }
+
+      @media (max-width: 768px) {
+        .hero-section {
+          padding: 6rem 0 3rem;
+        }
+
+        .hero-floating-icon {
+          display: none;
+        }
+
+        .hero-carousel {
+          height: 16rem;
+        }
+
+        .hero-stats {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-carousel {
+          height: 12rem;
+        }
+
+        .hero-cta-card {
+          padding: 1rem;
+        }
+      }
+
+      /* Chatbot Styles */
+      .chat-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+
+      .chat-modal.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .chat-container {
+        width: clamp(600px, 85vw, 900px);
+        height: clamp(600px, 85vh, 750px);
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transform: scale(0.9);
+        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      }
+
+      .chat-modal.active .chat-container {
+        transform: scale(1);
+      }
+
+      .chat-header {
+        background: linear-gradient(to right, #ff6b6b, #ffa726);
+        color: white;
+        padding: 1.5rem 2rem;
+        position: relative;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chat-header::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 20px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60'%3E%3Cpath fill='%23fff' d='M0,60 C360,0 1080,0 1440,60 L1440,60 L0,60 Z'/%3E%3C/svg%3E") no-repeat bottom;
+      }
+
+      .chat-header h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .chat-header p {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin: 0;
+      }
+
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem;
+        background: #fef2f2;
+        scroll-behavior: smooth;
+        height: calc(100vh - 200px);
+      }
+
+      .message-bubble {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+        animation: animate__animated animate__slideInUp 0.3s;
+      }
+
+      .message-bubble.user {
+        justify-content: flex-end;
+      }
+
+      .message-content {
+        max-width: 70%;
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .message-content.user {
+        background: #ff6b6b;
+        color: white;
+        border-radius: 16px 16px 0 16px;
+      }
+
+      .message-content.bot {
+        background: #fff;
+        border: 1px solid #ffe6e6;
+        border-radius: 16px 16px 16px 0;
+      }
+
+      .message-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        margin: 0 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffe6e6;
+      }
+
+      .message-time {
+        font-size: 0.75rem;
+        color: #888;
+        margin-top: 0.5rem;
+        text-align: right;
+      }
+
+      .message-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        justify-content: flex-end;
+      }
+
+      .message-actions button {
+        background: none;
+        border: none;
+        color: #ff6b6b;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 0.5rem;
+      }
+
+      .related-suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .related-suggestions button {
+        background: #fff;
+        border: 1px solid #ffe6e6;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .related-suggestions button:hover {
+        background: #ffe6e6;
+      }
+
+      .chat-input {
+        padding: 1.5rem 2rem;
+        background: #fff;
+        border-top: 1px solid #ffe6e6;
+      }
+
+      .chat-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .chat-toolbar select,
+      .chat-toolbar button {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ffe6e6;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .chat-toolbar select:focus,
+      .chat-toolbar button:hover {
+        background: #ffe6e6;
+      }
+
+      .chat-input-field {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .chat-input-field input {
+        width: 100%;
+        padding: 0.75rem 3rem 0.75rem 1rem;
+        border: 1px solid #ffe6e6;
+        border-radius: 12px;
+        font-size: 1rem;
+        outline: none;
+      }
+
+      .chat-input-field input:focus {
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+      }
+
+      .chat-input-field button {
+        position: absolute;
+        right: 0.5rem;
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .chat-input-field button:hover {
+        background: #ff8787;
+      }
+
+      .typing-indicator {
+        display: flex;
+        align-items: center;
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+
+      .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #ff6b6b;
+        border-radius: 50%;
+        margin-right: 4px;
+        animation: dot-bounce 1.4s infinite ease-in-out both;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation-delay: -0.32s;
+      }
+
+      .typing-indicator span:nth-child(3) {
+        animation-delay: -0.16s;
+      }
+
+      @keyframes dot-bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+      }
+
+      .progress-bar {
+        width: 0;
+        height: 4px;
+        background: #ff6b6b;
+        transition: width 0.1s linear;
+      }
+
+      #chatButton {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 50;
+        padding: 1.5rem;
+        background: linear-gradient(to bottom right, #ff6b6b, #ffa726);
+        color: white;
+        border-radius: 50%;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      #chatButton:hover {
+        transform: scale(1.15);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Responsive Adjustments for Chatbot */
+      @media (max-width: 768px) {
+        .chat-container {
+          width: 95vw;
+          height: 90vh;
+        }
+
+        .chat-messages {
+          height: calc(100vh - 250px);
+        }
+
+        .message-content {
+          max-width: 85%;
+        }
+
+        .chat-toolbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .chat-header h3 {
+          font-size: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .chat-container {
+          width: 100vw;
+          height: 100vh;
+          border-radius: 0;
+        }
+
+        .chat-header {
+          padding: 1rem;
+        }
+
+        .chat-messages {
+          padding: 1rem;
+          height: calc(100vh - 220px);
+        }
+
+        .chat-input {
+          padding: 1rem;
+        }
+
+        .chat-input-field button {
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+
+      /* General Styles */
+      .btn-primary {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: #ff8787;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        h1 {
+          font-size: clamp(2rem, 6vw, 3.75rem);
+        }
+
+        h2 {
+          font-size: clamp(1.875rem, 5vw, 3rem);
+        }
+
+        p {
+          font-size: clamp(0.875rem, 3vw, 1.125rem);
+        }
+
+        .feature-card,
+        .resource-card,
+        .testimonial-card {
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .btn-primary,
+        .border-2 {
+          padding: 0.75rem 1.5rem;
+          font-size: 0.875rem;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @keyframes gradient-x {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .animate-gradient-x {
+        background-size: 200% 200%;
+        animation: gradient-x 15s ease infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+      }
+
+      .animate-float {
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .animate-float-delayed {
+        animation: float 10s 2s ease-in-out infinite;
+      }
+
+      @keyframes text-shine {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+      }
+
+      .animate-text-shine {
+        background: linear-gradient(45deg, #fff 20%, #f8d7c9 40%, #fff 60%);
+        background-size: 300% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: text-shine 3s linear infinite;
+      }
+
+      @keyframes bounce-horizontal {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(5px); }
+      }
+
+      .animate-bounce-horizontal {
+        animation: bounce-horizontal 1.5s infinite;
+      }
+
+      .hover\:scale-105:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm fixed w-full z-50">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+          <a href="/" class="flex items-center">
+            <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center mr-2">
+              <i class="fas fa-heart text-white text-lg"></i>
+            </div>
+            <span class="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">NurtureAI</span>
+          </a>
+          <div class="hidden md:flex space-x-8">
+            <a href="#features" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">Features</a>
+            <a href="#resources" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">Resources</a>
+            <a href="#testimonials" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">Stories</a>
+            <a href="#about" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">About</a>
+          </div>
+          <button id="mobileMenuToggle" class="md:hidden text-gray-600 focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+        <div class="md:hidden hidden flex-col space-y-4 pb-4" id="mobileMenu">
+          <a href="#features" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">Features</a>
+          <a href="#resources" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">Resources</a>
+          <a href="#testimonials" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">Stories</a>
+          <a href="#about" class="text-gray-600 hover:text-orange-600 font-medium transition-colors">About</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section (Enhanced) -->
+    <section class="hero-section text-center" role="banner">
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 animate-gradient-x"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)]"></div>
+      </div>
+      <div class="hero-background"></div>
+      <!-- Floating Icons -->
+      <i class="fas fa-heart hero-floating-icon" style="top: 10%; left: 15%;"></i>
+      <i class="fas fa-baby-carriage hero-floating-icon" style="top: 20%; right: 5%; animation-delay: 2s;"></i>
+      <i class="fas fa-bear hero-floating-icon" style="bottom: 15%; left: 10%; animation-delay: 2s;"></i>
+      <div class="container mx-auto max-w-6xl px-4 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Text Content -->
+          <div class="text-left">
+            <h1 class="hero-title text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white animate__animated animate__fadeInDown">
+              Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">Parenting Partner</span><br>
+              for Every Moment
+            </h1>
+            <p class="hero-tagline text-lg sm:text-xl text-white/90 mb-8 max-w-md" id="heroTagline" aria-describedby="heroTagline">
+              Expert advice & support tailored to your family
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mb-8 sticky top-4">
+              <button class="btn-primary px-6 py-3 rounded-full text-lg font-medium">
+                Start Free Trial <i class="fas fa-arrow-right ml-2"></i>
+              </button>
+              <a href="https://www.youtube.com/watch?v=I8VNA55S-7I&pp=ygUJcGFyZW50aW5n" target="_blank" rel="noopener noreferrer">
+                <button class="border-2 border-orange-300 text-white px-6 py-3 rounded-full text-lg font-medium hover:bg-orange-300/10">
+                  <i class="fas fa-play mr-2"></i> Watch Demo
+                </button>
+              </a>
+              
+            </div>
+            <!-- Stats -->
+            <div class="hero-stats animate__animated animate__fadeInUp">
+              <div>
+                <span class="text-2xl font-bold text-white">10K+</span>
+                <p class="text-sm text-white/80">Parents Helped</p>
+              </div>
+              <div>
+                <span class="text-2xl font-bold text-white">24/7</span>
+                <p class="text-sm text-white/80">Support Available</p>
+              </div>
+              <div>
+                <span class="text-2xl font-bold text-white">100%</span>
+                <p class="text-sm text-white/80">Parent Approved</p>
+              </div>
+            </div>
+          </div>
+          <!-- Carousel -->
+          <div class="hero-carousel h-64 sm:h-80 lg:h-96">
+            <img src="https://images.unsplash.com/photo-1624003652795-a9f73df756fa?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Family playing" class="carousel-image active">
+            <img src="https://images.unsplash.com/photo-1535571393765-ea44927160be?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Bedtime routine" class="carousel-image">
+            <img src="https://images.unsplash.com/photo-1504439268584-b72c5019471e?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Parenting moment" class="carousel-image">
+            <div class="carousel-nav">
+              <span class="carousel-dot active" aria-label="Go to slide 1"></span>
+              <span class="carousel-dot" aria-label="Go to slide 2"></span>
+              <span class="carousel-dot" aria-label="Go to slide 3"></span>
+            </div>
+          </div>
+        </div>
+        <!-- CTA Cards -->
+
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <span class="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium mb-4">HOW WE HELP</span>
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 section-title">Support for Your Parenting Needs</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Practical tools to make your parenting journey easier and more joyful</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="feature-card p-8 rounded-2xl">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-600 to-red-600 text-white rounded-xl flex items-center justify-center mb-6">
+              <i class="fas fa-chart-line text-2xl"></i>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Track Your Child's Development</h3>
+            <p class="text-gray-600 leading-relaxed">Monitor your child's growth with simple insights and get alerts for key milestones.</p>
+          </div>
+          <div class="feature-card p-8 rounded-2xl">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-600 to-red-600 text-white rounded-xl flex items-center justify-center mb-6">
+              <i class="fas fa-comments text-2xl"></i>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Get Answers Anytime</h3>
+            <p class="text-gray-600 leading-relaxed">Instant, expert advice for your parenting questions, day or night.</p>
+          </div>
+          <div class="feature-card p-8 rounded-2xl">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-600 to-red-600 text-white rounded-xl flex items-center justify-center mb-6">
+              <i class="fas fa-shield-alt text-2xl"></i>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Keep Your Child Safe</h3>
+            <p class="text-gray-600 leading-relaxed">Tips to spot and prevent hazards at home, tailored to your child's age.</p>
+          </div>
+          <div class="feature-card p-8 rounded-2xl">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-600 to-red-600 text-white rounded-xl flex items-center justify-center mb-6">
+              <i class="fas fa-chart-bar text-2xl"></i>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Understand Your Child's Growth</h3>
+            <p class="text-gray-600 leading-relaxed">See your child's progress with easy-to-read charts and tips.</p>
+          </div>
+          <div class="feature-card p-8 rounded-2xl">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-600 to-red-600 text-white rounded-xl flex items-center justify-center mb-6">
+              <i class="fas fa-utensils text-2xl"></i>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Plan Healthy Meals</h3>
+            <p class="text-gray-600 leading-relaxed">Get family-friendly meal ideas that fit your child's needs and tastes.</p>
+          </div>
+          <div class="feature-card p-8 rounded-2xl">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-600 to-red-600 text-white rounded-xl flex items-center justify-center mb-6">
+              <i class="fas fa-moon text-2xl"></i>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Improve Sleep Routines</h3>
+            <p class="text-gray-600 leading-relaxed">Custom plans to help your child sleep better, adjusted to their habits.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="py-20 bg-white/60">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <span class="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium mb-4">PARENTING TOOLS</span>
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 section-title">Helpful Resources for Parents</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Explore tools and ideas to support you every day</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="resource-card p-8 rounded-xl">
+            <div class="mb-6">
+              <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-book-open text-2xl text-orange-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold mb-3 text-gray-800">Personalized Guides</h3>
+            <p class="text-gray-600">Guides that grow with your child, offering tips just for you.</p>
+            <p class="mt-4 text-sm text-gray-500">"These guides made parenting so much easier!" - Lisa M.</p>
+            <div class="mt-6">
+              <button class="text-orange-600 hover:text-orange-700 font-medium flex items-center">
+                Explore Guides <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div class="resource-card p-8 rounded-xl">
+            <div class="mb-6">
+              <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-calendar-check text-2xl text-orange-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold mb-3 text-gray-800">Daily Activity Ideas</h3>
+            <p class="text-gray-600">Fun, simple activities to keep your child happy and learning.</p>
+            <p class="mt-4 text-sm text-gray-500">"Perfect for busy days!" - Sarah J.</p>
+            <div class="mt-6">
+              <button class="text-orange-600 hover:text-orange-700 font-medium flex items-center">
+                View Ideas <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div class="resource-card p-8 rounded-xl">
+            <div class="mb-6">
+              <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-video text-2xl text-orange-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold mb-3 text-gray-800">Parenting Videos</h3>
+            <p class="text-gray-600">Easy-to-follow videos with tips for everyday parenting challenges.</p>
+            <p class="mt-4 text-sm text-gray-500">"So helpful for new parents!" - Emma T.</p>
+            <div class="mt-6">
+              <button class="text-orange-600 hover:text-orange-700 font-medium flex items-center">
+                Watch Videos <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div class="resource-card p-8 rounded-xl">
+            <div class="mb-6">
+              <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-podcast text-2xl text-orange-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold mb-3 text-gray-800">Parenting Podcasts</h3>
+            <p class="text-gray-600">Listen to experts share advice while you’re on the go.</p>
+            <p class="mt-4 text-sm text-gray-500">"Great for my commute!" - Mark R.</p>
+            <div class="mt-6">
+              <button class="text-orange-600 hover:text-orange-700 font-medium flex items-center">
+                Listen Now <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div class="resource-card p-8 rounded-xl">
+            <div class="mb-6">
+              <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-chart-pie text-2xl text-orange-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold mb-3 text-gray-800">Growth Tracker</h3>
+            <p class="text-gray-600">Simple tools to keep tabs on your child’s milestones.</p>
+            <p class="mt-4 text-sm text-gray-500">"Love seeing my kid’s progress!" - Aisha P.</p>
+            <div class="mt-6">
+              <button class="text-orange-600 hover:text-orange-700 font-medium flex items-center">
+                Track Progress <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div class="resource-card p-8 rounded-xl">
+            <div class="mb-6">
+              <div class="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-users text-2xl text-orange-600"></i>
+              </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold mb-3 text-gray-800">Parent Community</h3>
+            <p class="text-gray-600">Connect with other parents to share tips and stories.</p>
+            <p class="mt-4 text-sm text-gray-500">"Found my tribe here!" - David M.</p>
+            <div class="mt-6">
+              <button class="text-orange-600 hover:text-orange-700 font-medium flex items-center">
+                Join Community <i class="fas fa-arrow-right ml-2 text-sm"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <span class="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium mb-4">PARENT STORIES</span>
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 section-title">What Parents Are Saying</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Real experiences from families like yours</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="testimonial-card p-8 rounded-xl">
+            <div class="flex items-start mb-6">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah" class="w-14 h-14 rounded-full shadow-md object-cover">
+              <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-800">Sarah Johnson</h4>
+                <p class="text-orange-600 text-sm">Mother of 2-year-old</p>
+              </div>
+            </div>
+            <p class="text-gray-700 text-base sm:text-lg leading-relaxed italic">"NurtureAI made bedtime a breeze. We’re sleeping peacefully now!"</p>
+            <div class="mt-6 flex items-center space-x-1 text-amber-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+          <div class="testimonial-card p-8 rounded-xl">
+            <div class="flex items-start mb-6">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael" class="w-14 h-14 rounded-full shadow-md object-cover">
+              <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-800">Michael Chen</h4>
+                <p class="text-orange-600 text-sm">Father of 3-year-old</p>
+              </div>
+            </div>
+            <p class="text-gray-700 text-base sm:text-lg leading-relaxed italic">"The meal ideas helped my picky eater try new foods!"</p>
+            <div class="mt-6 flex items-center space-x-1 text-amber-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+          <div class="testimonial-card p-8 rounded-xl">
+            <div class="flex items-start mb-6">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Aisha" class="w-14 h-14 rounded-full shadow-md object-cover">
+              <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-800">Aisha Patel</h4>
+                <p class="text-orange-600 text-sm">Mother of twins</p>
+              </div>
+            </div>
+            <p class="text-gray-700 text-base sm:text-lg leading-relaxed italic">"The tips for twins brought peace to our home!"</p>
+            <div class="mt-6 flex items-center space-x-1 text-amber-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+          <div class="testimonial-card p-8 rounded-xl">
+            <div class="flex items-start mb-6">
+              <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="David" class="w-14 h-14 rounded-full shadow-md object-cover">
+              <div class="ml-4">
+                <h4 class="text-lg font-bold text-gray-800">David Miller</h4>
+                <p class="text-orange-600 text-sm">Single father</p>
+              </div>
+            </div>
+            <p class="text-gray-700 text-base sm:text-lg leading-relaxed italic">"NurtureAI keeps us organized and happy!"</p>
+            <div class="mt-6 flex items-center space-x-1 text-amber-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="mt-12 text-center">
+          <p class="text-gray-600">Watch how NurtureAI helped this family</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-20 bg-gradient-to-r from-orange-600 to-red-600 text-white">
+      <div class="container mx-auto px-4 text-center">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Stay Connected with Parenting Tips</h2>
+          <p class="text-base sm:text-lg text-orange-100 mb-8">Join our newsletter for monthly ideas to make parenting easier and more fun</p>
+          <form class="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
+            <input type="email" placeholder="Enter your email" class="flex-1 px-5 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm sm:text-base">
+            <button type="submit" class="bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">Join Now</button>
+          </form>
+          <p class="text-xs sm:text-sm text-orange-200 mt-4">Your privacy matters to us. Unsubscribe anytime.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col lg:flex-row items-center">
+          <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
+            <span class="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-medium mb-4">WHO WE ARE</span>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-gray-800">Here to Support Your Family</h2>
+            <p class="text-gray-600 mb-6 leading-relaxed text-sm sm:text-base">NurtureAI was created by parents and experts who understand the joys and challenges of raising kids.</p>
+            <p class="text-gray-600 mb-8 leading-relaxed text-sm sm:text-base">Our goal is to give you practical, caring advice tailored to your child’s unique needs.</p>
+            <button class="btn-primary px-6 py-3 rounded-lg font-medium text-sm sm:text-base">
+              Meet Our Team <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+          </div>
+          <div class="lg:w-1/2">
+            <div class="relative">
+              <div class="absolute -inset-4 bg-orange-500/10 rounded-3xl blur-xl rotate-1"></div>
+              <img src="https://images.unsplash.com/photo-1510146758428-e5e4b17b8b6a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Team" class="relative rounded-2xl shadow-xl w-full object-cover h-64 sm:h-96 lg:h-[500px]">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Chatbot Section -->
+    <div id="chatModal" class="chat-modal" role="dialog" aria-labelledby="chatHeader" aria-hidden="true">
+      <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+          <div>
+            <h3 id="chatHeader">NurtureAI</h3>
+            <p>Always here for you</p>
+          </div>
+          <div class="flex space-x-4">
+            <button id="feedbackButton" class="text-white hover:text-orange-200" title="Give Feedback" aria-label="Give Feedback">
+              <i class="fas fa-star"></i>
+            </button>
+            <button id="closeChat" class="text-white hover:text-orange-200" title="Close Chat" aria-label="Close Chat">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Messages -->
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+          <div class="message-bubble bot">
+            <div class="message-avatar">
+              <i class="fas fa-heart text-orange-600"></i>
+            </div>
+            <div class="message-content bot">
+              Hello! I'm NurtureAI, your parenting pal. How can I help you today?
+              <div class="message-time">Just now</div>
+              <div class="related-suggestions">
+                <button aria-label="Ask about sleep training">Sleep training?</button>
+                <button aria-label="Ask about picky eaters">Picky eaters?</button>
+                <button aria-label="Ask about milestones">Milestones?</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Progress Bar -->
+        <div id="progressBar" class="progress-bar"></div>
+        <!-- Input Area -->
+        <div class="chat-input">
+          <div id="typingIndicator" class="typing-indicator hidden">
+            <span></span><span></span><span></span> NurtureAI is typing
+          </div>
+          <div class="chat-toolbar">
+            <select id="childAge" aria-label="Select child's age group">
+              <option value="">Child's Age</option>
+              <option value="0-1">0-1 years</option>
+              <option value="1-3">1-3 years</option>
+              <option value="3-5">3-5 years</option>
+              <option value="5+">5+ years</option>
+            </select>
+            <button id="moodButton" aria-label="Share your mood">
+              <i class="fas fa-smile"></i> Mood
+            </button>
+            <button id="savedTipsButton" aria-label="View saved tips">
+              <i class="fas fa-bookmark"></i> Saved Tips
+            </button>
+            <button id="clearChatButton" aria-label="Clear chat">
+              <i class="fas fa-trash"></i> Clear
+            </button>
+          </div>
+          <div class="chat-input-field">
+            <input type="text" id="userInput" placeholder="Ask about parenting..." aria-label="Type your parenting question" autocomplete="off" />
+            <button id="sendButton" aria-label="Send message">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Chat Toggle Button -->
+    <button id="chatButton" aria-label="Open NurtureAI Chat">
+      <i class="fas fa-heart text-2xl"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div>
+            <div class="flex items-center mb-4">
+              <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center mr-2">
+                <i class="fas fa-heart text-white text-lg"></i>
+              </div>
+              <span class="text-xl font-bold">NurtureAI</span>
+            </div>
+            <p class="text-gray-400 text-sm mb-4">Supporting parents with love and smart solutions</p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white text-lg" aria-label="Facebook">
+                <i class="fab fa-facebook"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white text-lg" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white text-lg" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white text-lg" aria-label="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Our Tools</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Features</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Pricing</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">App</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Demo</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Resources</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Blog</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Guides</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Tips</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Help Center</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">About Us</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Our Story</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Careers</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Privacy</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors text-sm sm:text-base">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 text-xs sm:text-sm">© 2024 NurtureAI. All rights reserved.</div>
+      </div>
+    </footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { GoogleGenerativeAI } from "@google/generative-ai";
+
+  // API Keys (Replace with your actual keys)
+  const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
+  const GROQ_API_KEY = "YOUR_GROQ_API_KEY";
+
+  // Parenting-specific instructions
+  const parentingInfo = `
+    Parenting Assistant Instructions:
+    - You are NurtureAI, a warm, empathetic, and expert parenting assistant.
+    - Begin with empathy, e.g., "I know how challenging this can be!" or "You're doing amazing!"
+    - Provide concise (50-100 words), step-by-step advice on topics like parenting, child development, sleep, nutrition, behavior, milestones, tantrums, discipline, potty training, sibling rivalry, and communication.
+    - Include a practical example in each response, e.g., "Try this: sing a lullaby, then dim the lights for bedtime."
+    - Tailor advice to the child's age if provided (e.g., 0-1, 1-3 years); if not, ask gently, e.g., "How old is your little one?"
+    - Use simple, friendly language, avoiding jargon. Explain terms if needed, e.g., "A milestone is a skill like crawling."
+    - Suggest professional help for serious issues, e.g., "For persistent issues, a pediatrician can guide you."
+    - End with encouragement, e.g., "You've got this! Want more tips?"
+    - Example: "Tantrums are tough! Try staying calm, get to their level, and offer a hug. For example, say, 'I see you're upset, let's breathe together.' This worked for my friend’s 2-year-old. You've got this!"
+  `;
+
+  // Initialize Gemini API
+  let genAI, geminiModel;
+  try {
+    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    geminiModel = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-pro",
+      systemInstruction: parentingInfo
+    });
+  } catch (error) {
+    console.error("Gemini API Initialization Error:", error);
+  }
+
+  // Maintain conversation history and saved tips
+  let messagesHistory = { gemini: [], groq: [] };
+  let savedTips = JSON.parse(localStorage.getItem('savedTips') || '[]');
+  let userMood = '';
+  let childAge = '';
+  let selectedModel = 'gemini'; // Default model
+
+  // Helper function to update progress bar
+  function updateProgressBar(progress) {
+    const progressBar = document.getElementById('progressBar');
+    if (progressBar) {
+      progressBar.style.width = `${progress}%`;
+    }
+  }
+
+  // Helper function to get related suggestions based on user message
+  function getRelatedSuggestions(message) {
+    const lowerMsg = message.toLowerCase();
+    if (lowerMsg.includes('sleep') || lowerMsg.includes('bedtime')) {
+      return ['Nighttime routines?', 'Nap schedules?', 'Sleep regression?'];
+    } else if (lowerMsg.includes('eat') || lowerMsg.includes('food')) {
+      return ['Picky eater tips?', 'Meal planning?', 'Healthy snacks?'];
+    } else if (lowerMsg.includes('tantrum') || lowerMsg.includes('behavior')) {
+      return ['Calming techniques?', 'Discipline ideas?', 'Sibling conflicts?'];
+    } else {
+      return ['Milestones?', 'Potty training?', 'Parenting stress?'];
+    }
+  }
+
+  // Helper function to add messages to the chat
+  function addMessage(text, sender, relatedSuggestions = []) {
+    const messagesDiv = document.getElementById('chatMessages');
+    if (!messagesDiv) {
+      console.error("Chat messages container not found");
+      return;
+    }
+    const messageContainer = document.createElement('div');
+    messageContainer.className = `message-bubble ${sender === 'user' ? 'user' : 'bot'}`;
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.innerHTML = sender === 'user' ? '<i class="fas fa-user text-orange-600"></i>' : '<i class="fas fa-heart text-orange-600"></i>';
+    const msgContent = document.createElement('div');
+    msgContent.className = `message-content ${sender === 'user' ? 'user' : 'bot'}`;
+    msgContent.innerHTML = text + `<div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+    
+    if (sender === 'bot' && relatedSuggestions.length) {
+      const suggestionsDiv = document.createElement('div');
+      suggestionsDiv.className = 'related-suggestions';
+      relatedSuggestions.forEach(suggestion => {
+        const btn = document.createElement('button');
+        btn.textContent = suggestion;
+        btn.setAttribute('aria-label', `Ask about ${suggestion}`);
+        suggestionsDiv.appendChild(btn);
+      });
+      msgContent.appendChild(suggestionsDiv);
+    }
+
+    if (sender === 'bot') {
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'message-actions';
+      actionsDiv.innerHTML = `
+        <button class="save-tip" aria-label="Save this tip"><i class="fas fa-bookmark"></i></button>
+        <button class="share-tip" aria-label="Share this tip"><i class="fas fa-share"></i></button>
+      `;
+      msgContent.appendChild(actionsDiv);
+    }
+
+    messageContainer.appendChild(sender === 'user' ? msgContent : avatar);
+    messageContainer.appendChild(sender === 'user' ? avatar : msgContent);
+    messagesDiv.appendChild(messageContainer);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  // Save tip to localStorage
+  function saveTip(text) {
+    savedTips.push({ text, timestamp: new Date().toISOString() });
+    localStorage.setItem('savedTips', JSON.stringify(savedTips));
+    addMessage('Tip saved! Check it in Saved Tips.', 'bot');
+  }
+
+  // Share tip using Web Share API
+  function shareTip(text) {
+    if (navigator.share) {
+      navigator.share({
+        title: 'NurtureAI Parenting Tip',
+        text: text,
+        url: window.location.href
+      }).catch(() => addMessage('Sharing not supported on this device.', 'bot'));
+    } else {
+      addMessage('Copy this tip: ' + text, 'bot');
+    }
+  }
+
+  // Send message using selected model
+  async function sendMessage(userMessage, retry = false) {
+    if (!navigator.onLine) {
+      const lastResponse = JSON.parse(localStorage.getItem('lastResponse') || '{}');
+      if (lastResponse.question && lastResponse.answer) {
+        addMessage(`You're offline! Here's your last tip:<br><strong>${lastResponse.question}</strong><br>${lastResponse.answer}`, 'bot');
+      } else {
+        addMessage('You’re offline and no tips are cached. Connect to ask more!', 'bot');
+      }
+      return;
+    }
+
+    const context = childAge ? `Child's age: ${childAge}. ` : '';
+    const moodContext = userMood ? `Parent's mood: ${userMood}. ` : '';
+    const fullMessage = `${context}${moodContext}${userMessage}`;
+    addMessage(userMessage, 'user');
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator) {
+      typingIndicator.classList.remove('hidden');
+    }
+    let progress = 0;
+    updateProgressBar(progress);
+
+    try {
+      let accumulatedText = '';
+      const messagesDiv = document.getElementById('chatMessages');
+      const botContainer = document.createElement('div');
+      botContainer.className = 'message-bubble bot';
+      const botAvatar = document.createElement('div');
+      botAvatar.className = 'message-avatar';
+      botAvatar.innerHTML = '<i class="fas fa-heart text-orange-600"></i>';
+      const botMessageDiv = document.createElement('div');
+      botMessageDiv.className = 'message-content bot';
+      botContainer.appendChild(botAvatar);
+      botContainer.appendChild(botMessageDiv);
+      messagesDiv.appendChild(botContainer);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      if (selectedModel === 'gemini' && geminiModel) {
+        const chat = geminiModel.startChat({ history: messagesHistory.gemini });
+        let result = await chat.sendMessageStream(fullMessage);
+
+        for await (const chunk of result.stream) {
+          const chunkText = chunk.text();
+          accumulatedText += chunkText;
+          botMessageDiv.innerHTML = accumulatedText + `<div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+          progress += 10;
+          updateProgressBar(Math.min(progress, 100));
+        }
+
+        messagesHistory.gemini.push({ role: 'user', parts: [{ text: fullMessage }] });
+        messagesHistory.gemini.push({ role: 'model', parts: [{ text: accumulatedText }] });
+      } else if (selectedModel === 'groq') {
+        const messages = [
+          { role: 'system', content: parentingInfo },
+          ...messagesHistory.groq,
+          { role: 'user', content: fullMessage }
+        ];
+
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`
+          },
+          body: JSON.stringify({
+            messages,
+            model: 'llama3-70b-8192',
+            temperature: 0.7,
+            max_tokens: 1024,
+            stream: true
+          })
+        });
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
+          for (const line of lines) {
+            if (line === 'data: [DONE]') continue;
+            try {
+              const json = JSON.parse(line.replace('data: ', ''));
+              const chunkText = json.choices[0]?.delta?.content || '';
+              accumulatedText += chunkText;
+              botMessageDiv.innerHTML = accumulatedText + `<div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+              messagesDiv.scrollTop = messagesDiv.scrollHeight;
+              progress += 10;
+              updateProgressBar(Math.min(progress, 100));
+            } catch (e) {
+              console.warn("Error parsing chunk:", e);
+            }
+          }
+        }
+
+        messagesHistory.groq.push({ role: 'user', content: fullMessage });
+        messagesHistory.groq.push({ role: 'assistant', content: accumulatedText });
+      } else {
+        throw new Error("Selected model is not initialized");
+      }
+
+      const relatedSuggestions = getRelatedSuggestions(userMessage);
+      botMessageDiv.innerHTML = accumulatedText + `<div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+      if (relatedSuggestions.length) {
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'related-suggestions';
+        relatedSuggestions.forEach(suggestion => {
+          const btn = document.createElement('button');
+          btn.textContent = suggestion;
+          btn.setAttribute('aria-label', `Ask about ${suggestion}`);
+          suggestionsDiv.appendChild(btn);
+        });
+        botMessageDiv.appendChild(suggestionsDiv);
+      }
+
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'message-actions';
+      actionsDiv.innerHTML = `
+        <button class="save-tip" aria-label="Save this tip"><i class="fas fa-bookmark"></i></button>
+        <button class="share-tip" aria-label="Share this tip"><i class="fas fa-share"></i></button>
+      `;
+      botMessageDiv.appendChild(actionsDiv);
+
+      // Cache response
+      localStorage.setItem('lastResponse', JSON.stringify({ question: userMessage, answer: accumulatedText }));
+    } catch (error) {
+      console.error("Send Message Error:", error);
+      if (!retry) {
+        return sendMessage(userMessage, true);
+      }
+      addMessage("Sorry, something went wrong. Try again or check your saved tips!", 'bot');
+    }
+    if (typingIndicator) {
+      typingIndicator.classList.add('hidden');
+    }
+    updateProgressBar(0);
+  }
+
+  // Initialize the chatbot
+  function initChatbot() {
+    const chatModal = document.getElementById('chatModal');
+    const chatButton = document.getElementById('chatButton');
+    const closeChat = document.getElementById('closeChat');
+    const sendButton = document.getElementById('sendButton');
+    const userInput = document.getElementById('userInput');
+    const feedbackButton = document.getElementById('feedbackButton');
+    const childAgeSelect = document.getElementById('childAge');
+    const moodButton = document.getElementById('moodButton');
+    const savedTipsButton = document.getElementById('savedTipsButton');
+    const clearChatButton = document.getElementById('clearChatButton');
+
+    if (!chatButton || !chatModal) {
+      console.error("Chat button or modal not found in DOM");
+      return;
+    }
+
+    // Add model selection dropdown
+    const modelSelect = document.createElement('select');
+    modelSelect.id = 'modelSelect';
+    modelSelect.setAttribute('aria-label', 'Select AI model');
+    modelSelect.innerHTML = `
+      <option value="gemini">Gemini</option>
+      <option value="groq">Groq</option>
+    `;
+    const toolbar = document.querySelector('.chat-toolbar');
+    if (toolbar) {
+      toolbar.prepend(modelSelect);
+    } else {
+      console.error("Chat toolbar not found");
+    }
+
+    // Toggle chat modal
+    chatButton.addEventListener('click', () => {
+      console.log("Chat button clicked");
+      if (chatModal) {
+        chatModal.classList.add('active');
+        if (userInput) {
+          userInput.focus();
+        }
+      } else {
+        console.error("Chat modal not found");
+      }
+    });
+
+    if (closeChat) {
+      closeChat.addEventListener('click', () => {
+        console.log("Close chat clicked");
+        chatModal.classList.remove('active');
+      });
+    }
+
+    // Focus trapping
+    chatModal.addEventListener('focusin', (e) => {
+      if (!chatModal.contains(e.target)) {
+        userInput.focus();
+      }
+    });
+
+    // Swipe to close on mobile
+    let touchStartX = 0;
+    chatModal.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    });
+    chatModal.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].clientX;
+      if (touchStartX - touchEndX > 100) {
+        chatModal.classList.remove('active');
+      }
+    });
+
+    // Send message
+    if (sendButton) {
+      sendButton.addEventListener('click', () => {
+        const message = userInput.value.trim();
+        if (!message) return;
+        userInput.value = '';
+        sendMessage(message);
+      });
+    }
+
+    if (userInput) {
+      userInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') {
+          const message = userInput.value.trim();
+          if (!message) return;
+          userInput.value = '';
+          sendMessage(message);
+        }
+      });
+    }
+
+    // Model selection
+    if (modelSelect) {
+      modelSelect.addEventListener('change', () => {
+        selectedModel = modelSelect.value;
+        addMessage(`Switched to ${selectedModel === 'gemini' ? 'Gemini' : 'Groq'} model. How can I assist you now?`, 'bot');
+      });
+    }
+
+    // Child age selection
+    if (childAgeSelect) {
+      childAgeSelect.addEventListener('change', () => {
+        childAge = childAgeSelect.value;
+        if (childAge) {
+          addMessage(`Got it! I'll tailor tips for your ${childAge}-year-old.`, 'bot');
+        }
+      });
+    }
+
+    // Mood selection
+    if (moodButton) {
+      moodButton.addEventListener('click', () => {
+        const mood = prompt('How are you feeling today? (e.g., Happy, Tired, Stressed)');
+        if (mood) {
+          userMood = mood;
+          addMessage(`Thanks for sharing—you're feeling ${mood.toLowerCase()}. I'm here to help!`, 'bot');
+        }
+      });
+    }
+
+    // Saved tips
+    if (savedTipsButton) {
+      savedTipsButton.addEventListener('click', () => {
+        if (!savedTips.length) {
+          addMessage("No tips saved yet. Save some advice you love!", 'bot');
+          return;
+        }
+        const tipsText = savedTips.map((tip, i) => `${i + 1}. ${tip.text} (${new Date(tip.timestamp).toLocaleDateString()})`).join('<br>');
+        addMessage(`Your Saved Tips:<br>${tipsText}`, 'bot');
+      });
+    }
+
+    // Clear chat
+    if (clearChatButton) {
+      clearChatButton.addEventListener('click', () => {
+        messagesHistory[selectedModel] = [];
+        document.getElementById('chatMessages').innerHTML = '';
+        addMessage("Fresh start! What's on your mind?", 'bot');
+      });
+    }
+
+    // Feedback
+    if (feedbackButton) {
+      feedbackButton.addEventListener('click', () => {
+        const feedback = prompt('How can NurtureAI improve for you?');
+        if (feedback) {
+          addMessage('Thank you for your feedback!', 'bot');
+        }
+      });
+    }
+
+    // Event delegation for suggestions
+    const chatMessages = document.getElementById('chatMessages');
+    if (chatMessages) {
+      chatMessages.addEventListener('click', (e) => {
+        if (e.target.closest('.related-suggestions button')) {
+          const message = e.target.textContent;
+          userInput.value = '';
+          sendMessage(message);
+        }
+        if (e.target.closest('.save-tip')) {
+          const text = e.target.closest('.message-content').childNodes[0].textContent;
+          saveTip(text);
+        }
+        if (e.target.closest('.share-tip')) {
+          const text = e.target.closest('.message-content').childNodes[0].textContent;
+          shareTip(text);
+        }
+      });
+    }
+  }
+
+  // Hero Carousel Logic
+  function initCarousel() {
+    const images = document.querySelectorAll('.carousel-image');
+    const dots = document.querySelectorAll('.carousel-dot');
+    let currentIndex = 0;
+
+    function showImage(index) {
+      images.forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+        dots[i].classList.toggle('active', i === index);
+      });
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage(currentIndex);
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        currentIndex = i;
+        showImage(i);
+      });
+    });
+
+    setInterval(nextImage, 5000);
+
+    let touchStartX = 0;
+    const carousel = document.querySelector('.hero-carousel');
+    carousel.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    });
+    carousel.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].clientX;
+      if (touchStartX - touchEndX > 50) {
+        nextImage();
+      } else if (touchEndX - touchStartX > 50) {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+      }
+    });
+  }
+
+  // Initialize components
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded, initializing components");
+    try {
+      initChatbot();
+      initCarousel();
+    } catch (error) {
+      console.error("Initialization Error:", error);
+    }
+  });
+</script>
+    <script>
+      // Mobile Menu Toggle
+      const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+      const mobileMenu = document.getElementById("mobileMenu");
+      mobileMenuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        const icon = mobileMenuToggle.querySelector("i");
+        if (icon.classList.contains("fa-bars")) {
+          icon.classList.remove("fa-bars");
+          icon.classList.add("fa-xmark");
+        } else {
+          icon.classList.remove("fa-xmark");
+          icon.classList.add("fa-bars");
+        }
+      });
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth"
+          });
+        });
+      });
+
+      // Newsletter form submission
+      document.querySelector("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = e.target.querySelector("input").value;
+        if (email) {
+          alert(`Thanks for joining! We've sent a confirmation to ${email}`);
+          e.target.querySelector("input").value = "";
+        }
+      });
+    </script>
+  </body>
+</html>
