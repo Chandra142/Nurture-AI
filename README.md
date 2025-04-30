@@ -17,6 +17,10 @@ Parenting is a complex journey. **NurtureAI** empowers parents with AI-driven to
 - 🌐 Encourage open-source community contribution  
 
 ---
+## ▶️ *Live Demo*
+Click Here..👉 https://chandra142.github.io/Nurture-AI/
+
+---
 
 ## 🔍 Key Features
 
@@ -40,4 +44,4 @@ Parenting is a complex journey. **NurtureAI** empowers parents with AI-driven to
 
 ## 🌐 Live Website
 
-🔗 **Coming Soon...** (Deploy on GitHub Pages, Netlify, or Vercel)
+🔗 https://chandra142.github.io/Nurture-AI/
