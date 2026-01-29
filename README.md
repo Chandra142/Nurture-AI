@@ -42,6 +42,3 @@ Click Here..👉 https://chandra142.github.io/Nurture-AI/
 
 ---
 
-## 🌐 Live Website
-
-🔗 https://chandra142.github.io/Nurture-AI/
